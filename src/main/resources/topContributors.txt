@@ -1,0 +1,10 @@
+repo: garydgregory, user: garydgregory, location: USA, company: Apache Software Foundation, contributions: 2274
+repo: britter, user: britter, location: Neuss, company: @gradle, contributions: 656
+repo: sebbASF, user: sebbASF, location: null, company: null, contributions: 513
+repo: PascalSchumacher, user: PascalSchumacher, location: null, company: null, contributions: 263
+repo: mbenson, user: mbenson, location: Ashland City, TN USA, company: Three's, contributions: 222
+repo: dependabot[bot], user: dependabot[bot], location: null, company: null, contributions: 181
+repo: chtompki, user: chtompki, location: Richmond, VA, company: null, contributions: 87
+repo: mureinik, user: mureinik, location: Tel Aviv, Israel, company: Synopsys, Inc., contributions: 77
+repo: dmjones, user: dmjones, location: null, company: null, contributions: 61
+repo: chonton, user: chonton, location: Mountain View, CA, company: @proofpoint , contributions: 58
