@@ -18,7 +18,6 @@ public class RestTemplateConfig {
     public RestTemplate restTemplate() {
         RestTemplate restTemplate = new RestTemplate();
 
-
         restTemplate.getInterceptors().add(new BasicAuthorizationInterceptor(username, githubToken));
 
         return restTemplate;

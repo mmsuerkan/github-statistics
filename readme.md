@@ -40,7 +40,7 @@ GET http://localhost:8080/getTop10Contributors/apache/commons-lang
 Projenin çalışması için gerekli olan GitHub kullanıcı adı, token ve kaynak dosyaların bulunduğu dizin bilgileri, application.properties dosyasında bulunmaktadır.
 
 github.username=mmsuerkan
-github.token=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
+github.token=
 github.resources.path=src/main/resources/
 
 
