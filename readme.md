@@ -27,6 +27,9 @@ Uygulama başlatıldıktan sonra, aşağıdaki API'yi kullanarak en iyi 10 katk�
 ```http
 GET /getTop10Contributors/{organization}/{repository}
 
+Örnek Kullanım:
+curl --location 'http://localhost:8080/getTop10Contributors/apache/commons-lang'
+
 Parametreler:
 
 {organization}: GitHub organizasyon adı örneğin apache
