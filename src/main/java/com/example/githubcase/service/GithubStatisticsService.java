@@ -33,25 +33,34 @@ public class GithubStatisticsService {
 
     public boolean getTop10Contributors(String organization, String repository) {
         try {
-            String apiUrl = String.format("https://api.github.com/repos/%s/%s/contributors", organization, repository);
+            ResponseEntity<String> responseEntity = getRepositoryInfo(organization, repository);
 
-            ResponseEntity<String> responseEntity = restTemplate.exchange(
-                    apiUrl,
-                    HttpMethod.GET,
-                    null,
-                    String.class
-            );
-
-            String responseBody = responseEntity.getBody();
-            JsonNode jsonNode = objectMapper.readTree(responseBody);
+            JsonNode jsonNode = getJsonNode(responseEntity);
 
             List<String> topContributors = getTopContributors(jsonNode, 10, restTemplate, repository);
 
-            return writeToFile("topContributors.txt", topContributors,resourcesPath);
+            return writeToFile("topContributors.txt", topContributors, resourcesPath);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private JsonNode getJsonNode(ResponseEntity<String> responseEntity) throws JsonProcessingException {
+        String responseBody = responseEntity.getBody();
+        JsonNode jsonNode = objectMapper.readTree(responseBody);
+        return jsonNode;
+    }
+
+    private ResponseEntity<String> getRepositoryInfo(String organization, String repository) {
+        String apiUrl = String.format("https://api.github.com/repos/%s/%s/contributors", organization, repository);
+
+        return restTemplate.exchange(
+                apiUrl,
+                HttpMethod.GET,
+                null,
+                String.class
+        );
     }
 
     private static List<String> getTopContributors(JsonNode jsonNode, int count, RestTemplate restTemplate, String repository) throws JsonProcessingException {
@@ -64,28 +73,36 @@ public class GithubStatisticsService {
 
             int contributions = userNode.at("/contributions").asInt();
 
-            String userApiUrl = "https://api.github.com/users/" + login;
-            ResponseEntity<String> userResponseEntity = restTemplate.exchange(
-                    userApiUrl,
-                    HttpMethod.GET,
-                    null,
-                    String.class
-            );
+            ResponseEntity<String> userResponseEntity = getUserInfo(restTemplate, login);
 
-            String userResponseBody = userResponseEntity.getBody();
-            ObjectMapper objectMapper = new ObjectMapper();
-
-            JsonNode userJsonNode = objectMapper.readTree(userResponseBody);
-            String username = userJsonNode.at("/login").asText();
-            String location = userJsonNode.at("/location").asText();
-            String company = userJsonNode.at("/company").asText();
-
-            Contributor contributor = new Contributor(username,location,contributions,company);
-
-            topContributors.add(contributor.toString());
+            addTopContributors(userResponseEntity, contributions, topContributors);
         }
 
         return topContributors;
+    }
+
+    private static ResponseEntity<String> getUserInfo(RestTemplate restTemplate, String login) {
+        String userApiUrl = "https://api.github.com/users/" + login;
+        return restTemplate.exchange(
+                userApiUrl,
+                HttpMethod.GET,
+                null,
+                String.class
+        );
+    }
+
+    private static void addTopContributors(ResponseEntity<String> userResponseEntity, int contributions, List<String> topContributors) throws JsonProcessingException {
+        String userResponseBody = userResponseEntity.getBody();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        JsonNode userJsonNode = objectMapper.readTree(userResponseBody);
+        String username = userJsonNode.at("/login").asText();
+        String location = userJsonNode.at("/location").asText();
+        String company = userJsonNode.at("/company").asText();
+
+        Contributor contributor = new Contributor(username, location, contributions, company);
+
+        topContributors.add(contributor.toString());
     }
 
 
